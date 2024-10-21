@@ -34,6 +34,21 @@ project(QGroundControl
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     set(LINUX TRUE)
+
+    # Check Ubuntu or Arch Linux
+    execute_process(COMMAND lsb_release -is OUTPUT_VARIABLE DISTRO OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if("${DISTRO}" STREQUAL "Ubuntu")
+        set(UBUNTU TRUE)
+    else()
+        # Check if pacman exists for Arch
+        find_program(PACMAN_EXECUTABLE pacman)
+        if(PACMAN_EXECUTABLE)
+            set(ARCH_LINUX TRUE)
+        else()
+            message(STATUS "Unknown Linux distribution")
+        endif()
+    endif()
+
 endif()
 
 if(APPLE AND NOT IOS)
